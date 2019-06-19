@@ -1,59 +1,116 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa" target="_blank" rel="noopener">pwa</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <nav class="navbar navbar-dark bg-info">
+      <a href="/" class="navbar-brand">ML Links App</a>
+    </nav>
+    <div class="container">
+      <div class="row mt-5">
+        <div class="col-sm-4">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="text-center">Add A new Link</h3>
+            </div>
+            <div class="card-body text-center">
+               <form @submit.prevent="addWebsite">
+                 <div class="form-group">
+                   <input type="text" class="from-control" placeholder="Name"
+                   v-model="newWebsite.name" required>
+                 </div>
+                 <div class="form-group">
+                  <input type="text" class="from-control" placeholder="Description"
+                   v-model="newWebsite.description" required>
+                 </div>
+                 <div class="form-group">
+                  <input type="text" class="from-control" placeholder="URL"
+                   v-model="newWebsite.url" required>
+                 </div>
+                 <input type="submit" class="btn bg-info" value="Add Link">
+               </form>
+            </div>
+          </div>
+        </div>
+        <div class="col sm-8">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="text-center">Websites List</h3>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Desc</th>
+                    <th class="text-center">Op</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="website in websites" :key="website">
+                    <td>
+                      <a :href="website.url" target="_blank">{{ website.name }}</a>
+                    </td>
+                    <td>
+                      {{ website.description }}
+                    </td>
+                    <td>
+                      <button class="btn bg-info" @click="deleteWebsite
+                      (website)">Del</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Firebase from 'firebase';
+import config from '@/firebase/config';
+import toastr from 'toastr';
+
+const app = Firebase.initializeApp(config);
+const db = app.database();
+const websitesRef = db.ref('websites');
+
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String,
+  firebase: {
+    websites: websitesRef,
+  },
+  data() {
+    return {
+      newWebsite: {
+        name: null,
+        description: null,
+        url: null,
+      },
+    };
+  },
+  methods: {
+    addWebsite() {
+      websitesRef.push(this.newWebsite);
+      toastr.success('Website Added');
+      this.newWebsite.name = '';
+      this.newWebsite.description = '';
+      this.newWebsite.url = '';
+    },
+    deleteWebsite(website) {
+      if (confirm('Are you sure you want to delete it?')) {
+        websitesRef.child(website['.key']).remove();
+        toastr.success('Website Removed');
+      }
+    },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.sm-8 {
+  display: flex;
+  justify-content: center;
 }
 </style>
