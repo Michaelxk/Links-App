@@ -5,10 +5,10 @@
     </nav>
     <div class="container">
       <div class="row mt-5">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
           <div class="card">
             <div class="card-header">
-              <h3 class="text-center">Add A new Link</h3>
+              <h3 class="text-center">Add New Link</h3>
             </div>
             <div class="card-body text-center">
                <form @submit.prevent="addWebsite">
@@ -17,43 +17,35 @@
                    v-model="newWebsite.name" required>
                  </div>
                  <div class="form-group">
-                  <input type="text" class="from-control" placeholder="Description"
-                   v-model="newWebsite.description" required>
-                 </div>
-                 <div class="form-group">
                   <input type="text" class="from-control" placeholder="URL"
                    v-model="newWebsite.url" required>
                  </div>
-                 <input type="submit" class="btn bg-info" value="Add Link">
+                 <input type="submit" class="btn bg-info" id="Btn-Del" value="Add Link">
                </form>
             </div>
           </div>
         </div>
-        <div class="col sm-8">
+        <div class="col-sm-6">
           <div class="card">
             <div class="card-header">
-              <h3 class="text-center">Websites List</h3>
+              <h3 class="text-center">Projects List</h3>
             </div>
             <div class="card-body">
               <table class="table table-striped table-bordered">
                 <thead>
                   <tr>
                     <th class="text-center">Name</th>
-                    <th class="text-center">Desc</th>
-                    <th class="text-center">Op</th>
+                    <th class="text-center">Operation</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody class="tbody">
                   <tr v-for="website in websites" :key="website">
                     <td>
                       <a :href="website.url" target="_blank">{{ website.name }}</a>
                     </td>
                     <td>
-                      {{ website.description }}
-                    </td>
-                    <td>
-                      <button class="btn bg-info" @click="deleteWebsite
-                      (website)">Del</button>
+                      <button class="btn bg-info" id="btn-del" @click="deleteWebsite
+                      (website)">Delete</button>
                     </td>
                   </tr>
                 </tbody>
@@ -84,7 +76,6 @@ export default {
     return {
       newWebsite: {
         name: null,
-        description: null,
         url: null,
       },
     };
@@ -94,7 +85,6 @@ export default {
       websitesRef.push(this.newWebsite);
       toastr.success('Website Added');
       this.newWebsite.name = '';
-      this.newWebsite.description = '';
       this.newWebsite.url = '';
     },
     deleteWebsite(website) {
@@ -109,8 +99,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.sm-8 {
-  display: flex;
-  justify-content: center;
+#Btn-Del {
+  width: 50%;
+}
+.btn {
+  width: 100%;
 }
 </style>
