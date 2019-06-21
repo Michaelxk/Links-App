@@ -99,6 +99,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.navbar-brand {
+  margin-top: -9px;
+  font-size: 1.6em;
+}
 #Btn-Del {
   width: 50%;
 }
