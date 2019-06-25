@@ -8,7 +8,7 @@
         <div class="col-sm-6">
           <div class="card">
             <div class="card-header">
-              <h3 class="text-center">Add New Link</h3>
+              <h3 class="text-center">Website Links</h3>
             </div>
             <div class="card-body text-center">
                <form @submit.prevent="addWebsite">
@@ -45,7 +45,7 @@
                     </td>
                     <td>
                       <button class="btn bg-info" id="btn-del" @click="deleteWebsite
-                      (website)">Delete</button>
+                      (website)">Del</button>
                     </td>
                   </tr>
                 </tbody>
@@ -102,6 +102,10 @@ export default {
 .navbar-brand {
   margin-top: -9px;
   font-size: 1.6em;
+  font-weight: bold;
+}
+.form-control {
+  text-align: center;
 }
 #Btn-Del {
   width: 50%;
